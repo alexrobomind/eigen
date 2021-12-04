@@ -38,7 +38,7 @@ template<typename T, typename Dimensions, int Options> class TensorStorage;
 
 // Pure fixed-size storage
 template<typename T, typename FixedDimensions, int Options_>
-class TensorStorage
+class TensorStorage : private FixedDimensions
 {
  private:
   static const std::size_t Size = FixedDimensions::total_size;
@@ -57,11 +57,10 @@ class TensorStorage
   EIGEN_DEVICE_FUNC
   EIGEN_STRONG_INLINE const T *data() const { return m_data; }
 
-  static EIGEN_DEVICE_FUNC
-  EIGEN_STRONG_INLINE const FixedDimensions& dimensions()
+  EIGEN_DEVICE_FUNC
+  EIGEN_STRONG_INLINE const FixedDimensions& dimensions() const
   {
-    static const FixedDimensions* singleton_dimensions = new FixedDimensions();
-    return *singleton_dimensions;
+    return *this;
   }
 
   EIGEN_DEVICE_FUNC
